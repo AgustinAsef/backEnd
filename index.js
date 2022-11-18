@@ -3,6 +3,7 @@ const app = express()
 const Contenedor = require ("./container/container.js")
 const producto = new Contenedor()
 
+app.use('/api', express.static(__dirname + '/public'))
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
@@ -49,14 +50,21 @@ app.post('/api/productos/post', (req, res)=>{
     })
     
 app.put('/api/productos/:id', (req, res)=>{
-/*         const { producto } = req.body
-        const { id } = req.params 
-    
-        const productoModificar = productos[parseInt(id)]
-    
-        productos[id] = producto*/
-    
-        res.json({msg: "modificar productos por id"})
+    let { name, price, thumbnail } = req.body
+    let { id } = req.params
+    id = parseInt(id)
+    let producto = { name : name, price : price, thumbnail : thumbnail}
+    let obj = productos.find(obj => obj.id === parseInt(id))
+    let index = productos.indexOf(obj)
+
+        if (!obj) {
+            console.log("no se encontro el producto");
+            res.json({msg: "no se encontro el producto"})
+            }else{
+                productos[index] = {...producto, id}
+                res.json({msg: "producto modificado con exito"})
+        }
+        
     })
     
 app.delete('/api/productos/:id', (req, res)=>{
@@ -74,4 +82,5 @@ const server = app.listen(PORT, ()=>{
     console.log('esta vivoooo!!')
 })
 
+server.on("error", error => console.log("error al crear el servidor"))
 
