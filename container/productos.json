@@ -1,0 +1,12 @@
+[{
+    "name":"Remera",
+    "price": 1200,
+    "thumbnail":"https/",
+    "id":0
+},
+{
+    "name":"Pantalon",
+    "price": 2100,
+    "thumbnail":"https/",
+    "id":1
+}]
