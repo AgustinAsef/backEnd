@@ -6,9 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="./js/index.js"></script>
 </head>
 <body>
-    <h1>cliente websocket</h1>
+    <nav>
+        <h1>cliente websocket</h1>
+    </nav>
+        <form onsubmit ="return addNewMensaje()">
+            <div>
+                <input type="text" placeholder="ingresa tu nomber" id="name">
+                <input type="text" placeholder="ingresa tu mensage" id="mensaje">
+                <button id="submitChatButton" >enviar</button>
+            </div>
+        </form>
+        <p id="msjSpan"></p>
+
+    <script src="js/index.js"></script>
 </body>
 </html>

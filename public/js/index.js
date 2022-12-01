@@ -1,14 +1,42 @@
-const express = require ('express')
-const {Server: HttpServer} = require('http')
-const {Server: IOServer} = require('socket.io')
+//esto es cliente
+const socket = io.connect()
 
-const app = express()
+function addNewMensaje(params) {
+    const inputName = document.getElementById('name')
+    const inputMensaje = document.getElementById('mensaje')
+        console.log(inputName.value +' '+ inputMensaje.value+ ' '+'log del input');
 
-const httpServer = new HttpServer(app)
-const io = new IOServer(httpServer)
+        let today = new Date();
+        let hora = today.getHours() + ':' + today.getMinutes()
+        let fecha = today.getDate() + '-' + ( today.getMonth() + 1 )
 
-app.use(express.static('public'))
+        let inputMensajeArr = {
+            id: socket.id,
+            autor: inputName.value,
+            mensaje: inputMensaje.value,
+            fecha: fecha,
+            hora: hora
+        }
 
-io.on('connetciom', socket => {
-    console.log('nuevo cliente conectado')
+        document.getElementById('mensaje').value= ''
+        socket.emit('mensaje', inputMensajeArr) 
+
+    return false 
+}
+
+socket.on('mensajes', msjs =>{
+
+    console.log(msjs,' ', 'log de los mensaje')
+
+    if (msjs.length == 0) {
+        
+        document.getElementById('msjSpan').innerHTML = "no se encontraron mensajes"
+
+    }else{
+        
+        const inputMsj = msjs.map(msj => `Mensaje de: ${msj.autor}, fecha: ${msj.fecha}, hora: ${msj.hora}, mensaje: ${msj.mensaje}.`).join
+        ('<br>')
+        document.getElementById('msjSpan').innerHTML = inputMsj
+
+    }
 })

@@ -1,19 +1,23 @@
+//esto es servidor
 const express = require ('express')
+const {Server: HttpServer} = require('http')
+const {Server: IOServer} = require('socket.io')
 
 const app = express()
 
-const Contenedor = require ("./container/container.js")
-const producto = new Contenedor()
+const httpServer = new HttpServer(app)
+const io = new IOServer(httpServer)
 
 //motor de plantilla
-  
 app.set('view engine', 'ejs')
 app.set('views', './views')
 
 //ruta raiz
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
+app.use(express.static('public'))
 
+//config de puerto
 const PORT = 8090
 
 // array de productos
@@ -28,6 +32,20 @@ productos = [
     id:2}
 ]
 
+mensajes = [
+    {
+      autor:'Juan',
+      hora: 'mensaje preguardado',
+      mensaje:'la vaca, mu'
+    },
+    {
+        autor:'Pedro',
+        hora: 'mensaje preguardado',
+        mensaje:'la misma vaca, mu'
+    }
+]
+
+
 //Middleware
 function mdl1(req, res, next) {
     console.log(req.query.rol)
@@ -37,8 +55,21 @@ function mdl1(req, res, next) {
     next()
 }
 
+io.on('connection', socket => {
+    console.log('nuevo cliente conectado')
+
+    socket.emit('mensajes', mensajes)
+
+    socket.on('mensaje', data =>{
+
+        console.log(data,' ', 'log de la data recibida')
+        mensajes.push(data)
+        io.sockets.emit('mensajes', mensajes)
+    })    
+})
+
 //ruta de productos y metodos
-app.get('/', (req, res)=>{
+app.get('/productos', (req, res)=>{
     res.render('main', {productos}) 
 })
     
@@ -64,9 +95,7 @@ app.post('/productos', (req, res)=>{
     let articulo ={ name : name, price : price, thumbnail : thumbnail} 
     const newProduct = {...articulo, id}
     productos.push(newProduct)
-    console.log(newProduct)
-    console.log(productos)
-    res.redirect('/')
+    res.redirect('/productos')
     })
     
 app.put('/productos/:id', (req, res)=>{
@@ -97,7 +126,7 @@ app.delete('/productos/:id', (req, res)=>{
     res.json({msg: "se borro el producto correctamente"})
     })
         
-const server = app.listen(PORT, ()=>{
+const server = httpServer.listen(PORT, ()=>{
     console.log('esta vivoooo!!')
 })
 
