@@ -35,11 +35,13 @@ productos = [
 mensajes = [
     {
       autor:'Juan',
+      fecha:'hoy',
       hora: 'mensaje preguardado',
       mensaje:'la vaca, mu'
     },
     {
         autor:'Pedro',
+        fecha:'hoy',
         hora: 'mensaje preguardado',
         mensaje:'la misma vaca, mu'
     }

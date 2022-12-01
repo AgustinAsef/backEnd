@@ -2,17 +2,17 @@
 const socket = io.connect()
 
 function addNewMensaje(params) {
-    const inputName = document.getElementById('name')
+    const inputEmail = document.getElementById('email')
     const inputMensaje = document.getElementById('mensaje')
-        console.log(inputName.value +' '+ inputMensaje.value+ ' '+'log del input');
+        console.log(inputEmail.value +' '+ inputMensaje.value+ ' '+'log del input');
 
         let today = new Date();
         let hora = today.getHours() + ':' + today.getMinutes()
-        let fecha = today.getDate() + '-' + ( today.getMonth() + 1 )
+        let fecha = today.getDate() + '-' + ( today.getMonth() + 1 ) + '-' +  today.getFullYear()
 
         let inputMensajeArr = {
             id: socket.id,
-            autor: inputName.value,
+            autor: inputEmail.value,
             mensaje: inputMensaje.value,
             fecha: fecha,
             hora: hora
@@ -34,7 +34,7 @@ socket.on('mensajes', msjs =>{
 
     }else{
         
-        const inputMsj = msjs.map(msj => `Mensaje de: ${msj.autor}, fecha: ${msj.fecha}, hora: ${msj.hora}, mensaje: ${msj.mensaje}.`).join
+        const inputMsj = msjs.map(msj => `<strong>Mensaje de ${msj.autor}:</strong> fecha: ${msj.fecha}, hora: ${msj.hora}, mensaje: ${msj.mensaje}.`).join
         ('<br>')
         document.getElementById('msjSpan').innerHTML = inputMsj
 
