@@ -18,7 +18,7 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 
 //config de puerto
-const PORT = 8090
+const PORT = process.env.PORT || 8090
 
 // array de productos
 productos = [
